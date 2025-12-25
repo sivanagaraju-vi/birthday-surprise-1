@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Birthday Surprise 💖</title>
+
+<style>
+*{
+  margin:0;padding:0;box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+/* Background */
+body{
+  background:radial-gradient(circle at top,#ff0080,#1a001a);
+  color:white;
+  overflow:hidden;
+}
+
+/* Mobile container */
+.wrapper{
+  max-width:430px;          /* Mobile width */
+  margin:auto;
+  min-height:100vh;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+
+/* Pages */
+.page{
+  display:none;
+  min-height:100vh;
+  padding:20px;
+}
+.page.active{display:block;}
+
+/* Neon text */
+.neon{
+  text-shadow:0 0 10px #ff66cc,0 0 20px #ff1493;
+}
+
+/* Buttons */
+button{
+  background:#ff1493;
+  color:white;
+  border:none;
+  padding:14px 26px;
+  font-size:16px;
+  border-radius:30px;
+  box-shadow:0 0 20px #ff66cc;
+  margin-top:18px;
+}
+
+/* Floating hearts */
+.heart{
+  position:absolute;
+  animation:float 6s linear infinite;
+  pointer-events:none;
+}
+@keyframes float{
+  from{transform:translateY(100vh);}
+  to{transform:translateY(-10vh);}
+}
+
+/* Photos */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-top:15px;
+}
+.grid img{
+  width:100%;
+  border-radius:16px;
+  box-shadow:0 0 15px pink;
+}
+
+/* Videos */
+video{
+  width:100%;
+  border-radius:18px;
+  box-shadow:0 0 25px hotpink;
+}
+
+/* Fireworks canvas */
+canvas{
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:10;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="wrapper">
+
+<!-- PAGE 1 -->
+<div class="page active" id="p1">
+  <h1 class="neon">💌 A Surprise For You Dear 💌</h1>
+  <h2 id="timer"></h2>
+  <button id="to2" disabled>Open Surprise 🎁</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="p2">
+  <h1 class="neon">Watch till the end ❤️</h1>
+  <video controls>
+    <source src="video1.mp4">
+  </video>
+  <button onclick="show(3)">Next ➡️</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="p3">
+  <h1 class="neon">Happy Birthday My Love 🎂💖</h1>
+  <p>You are the most beautiful part of my life ✨</p>
+  <button onclick="playMusic()">Play Music 🎶</button>
+  <button onclick="show(4)">Next ➡️</button>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="p4">
+  <h1 class="neon">Happy Birthday My Dear Lovely Wifeee 💍💖</h1>
+  <div class="grid">
+    <img src="img1.jpg"><img src="img2.jpg">
+    <img src="img3.jpg"><img src="img4.jpg">
+    <img src="img5.jpg"><img src="img6.jpg">
+    <img src="img7.jpg"><img src="img8.jpg">
+  </div>
+  <button onclick="show(5)">Next ➡️</button>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page" id="p5">
+  <h1 class="neon">One More Special Video 🎥</h1>
+  <video controls>
+    <source src="video2.mp4">
+  </video>
+  <button onclick="show(6)">Next ➡️</button>
+</div>
+
+<!-- PAGE 6 -->
+<div class="page" id="p6">
+  <h1 class="neon">Thank You For Being In My Life 💖</h1>
+  <p>
+    Thank you for loving me, supporting me,  
+    and making my world brighter every day 🌈
+  </p>
+  <button onclick="show(7)">Next ➡️</button>
+</div>
+
+<!-- PAGE 7 -->
+<div class="page" id="p7">
+  <h1 class="neon">Happy Birthday Once Again My Love 🎉💞</h1>
+  <button onclick="stopMusic()">Stop Music 🔇</button>
+</div>
+
+</div>
+
+<audio id="bgMusic" src="music.mp3" loop></audio>
+
+<script>
+/* Floating hearts */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="💖";
+  h.style.left=Math.random()*100+"%";
+  h.style.fontSize=(16+Math.random()*20)+"px";
+  document.querySelector(".wrapper").appendChild(h);
+  setTimeout(()=>h.remove(),6000);
+},350);
+
+/* Countdown */
+const targetDate=new Date("2025-12-15T00:00:00").getTime();
+const timer=document.getElementById("timer");
+const btn=document.getElementById("to2");
+
+setInterval(()=>{
+  const now=Date.now();
+  const diff=targetDate-now;
+  if(diff<=0){
+    timer.innerHTML="🎉 Time to Open 🎉";
+    btn.disabled=false;
+  }else{
+    const d=Math.floor(diff/(1000*60*60*24));
+    const h=Math.floor((diff/(1000*60*60))%24);
+    const m=Math.floor((diff/(1000*60))%60);
+    const s=Math.floor((diff/1000)%60);
+    timer.innerHTML=`${d}d ${h}h ${m}m ${s}s`;
+  }
+},1000);
+
+btn.onclick=()=>show(2);
+function show(n){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("p"+n).classList.add("active");
+}
+
+/* Music */
+function playMusic(){document.getElementById("bgMusic").play();}
+function stopMusic(){document.getElementById("bgMusic").pause();}
+
+/* Fireworks */
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+function resize(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+}
+resize();window.onresize=resize;
+
+setInterval(()=>{
+  const x=Math.random()*canvas.width;
+  const y=Math.random()*canvas.height/2;
+  for(let i=0;i<40;i++){
+    ctx.beginPath();
+    ctx.arc(x,y,Math.random()*2+1,0,Math.PI*2);
+    ctx.fillStyle=`hsl(${Math.random()*360},100%,60%)`;
+    ctx.fill();
+  }
+  setTimeout(()=>ctx.clearRect(0,0,canvas.width,canvas.height),600);
+},900);
+</script>
+
+</body>
+</html>
